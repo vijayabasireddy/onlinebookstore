@@ -1,0 +1,40 @@
+services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Basireddy@10
+      MYSQL_DATABASE: onlinebookstore
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - onlinebookstore_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pBasireddy@10"]
+      interval: 10s
+      retries: 5
+      start_period: 30s  # Wait 30s before failing
+ 
+  onlinebookstoreapp:
+    image: tomcat:9.0-jdk17
+    container_name: onlinebookstoreapp
+    restart: always
+    depends_on:
+      mysql_db:
+        condition: service_healthy  # Ensures MySQL is ready before Tomcat starts
+    volumes:
+      - ./target/onlinebookstore.war:/usr/local/tomcat/webapps/onlinebookstore.war
+    ports:
+      - "8080:8080"
+    networks:
+      - onlinebookstore_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/onlinebookstore?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: Admin
+      SPRING_DATASOURCE_PASSWORD: Admin
+ 
+networks:
+  onlinebookstore_network:
