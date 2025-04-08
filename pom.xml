@@ -81,10 +81,6 @@
         		<id>nexusRepo</id>
         		<url>http://127.0.0.1:8081/repository/sample-snapshots/</url>
     		</snapshotRepository>
-		<snapshotRepository>
-			<id>nexusRepo</id>
-			<url>http://127.0.0.1:8081/repository/</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 </project>
