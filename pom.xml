@@ -50,6 +50,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>nexusRepo</id>
+			<url>http://192.168.70.184:8081/repository/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<dependencies>
 
 		<dependency>
@@ -72,12 +78,7 @@
 			<version>3.1.0</version>
 		</dependency>
 	</dependencies>
-<distributionManagement>
-<snapshotRepository>
-<id>nexusRepo</id>
-<url>http://192.168.70.184:8081/repository/</url>
-</snapshotRepository>
-</distributionManagement>
+
 
  
 
