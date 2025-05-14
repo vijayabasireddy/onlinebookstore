@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import time
 
 # Setup Chrome WebDriver
-service = Service(executable_path="/home/bvijayalakshmi/selenium/chromedriver")
+service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
 
 # Step 1: Go to main page
