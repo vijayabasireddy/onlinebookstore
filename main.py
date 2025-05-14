@@ -6,11 +6,11 @@ import tempfile
 
 # === Book Test Data ===
 book_quantity = "10"
-book_id = "9138f76a-88a2-4224-92c8-51163ed909c6"
+book_id = "80d02940-fe37-4901-a7ba-8e5320c9441f"
 book_name = "one indian girl"
 author = "chetan bhagat"
-price = "399"
-quantity = "2"
+price = "299"
+quantity = "1"
 
 # === Chrome Headless Setup ===
 options = webdriver.ChromeOptions()
