@@ -118,19 +118,21 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import time
 import tempfile
+import os
 
-# === Chrome Options ===
+# Chrome Options
 options = webdriver.ChromeOptions()
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--disable-gpu')
 options.add_argument(f'--user-data-dir={tempfile.mkdtemp()}')
+options.add_argument('--window-size=1280,1024')
 
-# Setup Chrome WebDriver
+# Setup WebDriver
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service, options=options)
 
-# === Book Details ===
+# Test Data
 book_quantity = 30
 book_id = "8bd5fe50-9725-41da-bad8-476d577894f1"
 book_name = "one arranged murder"
@@ -139,28 +141,33 @@ price = "499"
 quantity = "5"
 
 try:
+    # Test steps
+    print("🌐 Navigating to application...")
     driver.get("http://192.168.70.41:8080/onlinebookstore/")
     time.sleep(2)
 
+    print("🔑 Logging in...")
     driver.find_element(By.LINK_TEXT, "Login").click()
     time.sleep(2)
-
+    
     driver.find_element(By.XPATH, '//a[@href="SellerLogin.html"]').click()
     time.sleep(2)
-
+    
     driver.find_element(By.ID, "userName").send_keys("admin")
     driver.find_element(By.ID, "Password").send_keys("admin")
     time.sleep(1)
-
+    
     driver.find_element(By.CLASS_NAME, "AdminLogin").click()
     time.sleep(2)
-
+    
     if "Incorrect" in driver.page_source:
         print("❌ Login failed: Incorrect credentials.")
     elif "Welcome" in driver.page_source or "Dashboard" in driver.title:
         print("✅ Login successful!")
     else:
-        print("⚠️ Login result uncertain – check manually.")
+        print("⚠️ Login result uncertain")
+
+
 
     driver.find_element(By.ID, "storebooks").click()
     time.sleep(2)
