@@ -90,7 +90,7 @@ try:
     # Step 13: Enter book ID and remove
     driver.find_element(By.ID, "bookCode").send_keys(book_id)
     driver.find_element(By.XPATH, '//input[@type="submit" and contains(@value, "Remove")]').click()
-    print(f"🗑️ Book with ID {book115_id} submitted for removal.")
+    print(f"🗑️ Book with ID {book_id} submitted for removal.")
     time.sleep(3)
     # Step 14: Click on "About Us"
     driver.find_element(By.ID, "about").click()
