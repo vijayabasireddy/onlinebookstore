@@ -114,45 +114,29 @@
 
 
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import time
-import subprocess
-import os
 
-# Start screen recording
-print("🎥 Starting screen recording...")
-recording_process = subprocess.Popen([
-    'ffmpeg',
-    '-f', 'x11grab',
-    '-video_size', '1280x1024',
-    '-framerate', '30',
-    '-i', ':99',
-    '-codec:v', 'libx264',
-    '-preset', 'ultrafast',
-    '-y', 'selenium_recording.mp4'
-], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-# Chrome Options
+# Chrome Options - runs in visible mode by default in the container
 options = webdriver.ChromeOptions()
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--window-size=1280,1024')
-options.add_argument('--auto-open-devtools-for-tabs')  # Opens dev tools for better visibility
 
-# Setup WebDriver
+# Test Data
+book_quantity = 30
+book_id = "8bd5fe50-9725-41da-bad8-476d577894f1"
+book_name = "one arranged murder"
+author = "chetan bhagat"
+price = "499"
+quantity = "5"
+
 try:
-    print("🚀 Initializing ChromeDriver...")
-    service = Service(executable_path='./chromedriver')
-    driver = webdriver.Chrome(service=service, options=options)
-    
-    # Test Data
-    book_quantity = 30
-    book_id = "8bd5fe50-9725-41da-bad8-476d577894f1"
-    book_name = "one arranged murder"
-    author = "chetan bhagat"
-    price = "499"
-    quantity = "5"
+    # Initialize driver (chromedriver is pre-installed in the container)
+    driver = webdriver.Remote(
+        command_executor='http://localhost:4444/wd/hub',
+        options=options
+    )
 
     # Test steps
     print("🌐 Navigating to application...")
@@ -244,6 +228,4 @@ except Exception as e:
 finally:
     print("🔚 Cleaning up...")
     driver.quit()
-    recording_process.terminate()
-    time.sleep(2)  # Give ffmpeg time to finalize recording
-    print("✅ Browser closed and recording saved")
+    print("✅ Browser closed")
