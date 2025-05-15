@@ -120,23 +120,20 @@ import time
 import os
 from datetime import datetime
 
-# Create screenshots directory if not exists
-if not os.path.exists('selenium_screenshots'):
-    os.makedirs('selenium_screenshots')
+# Setup screenshot directory
+os.makedirs('selenium_screenshots', exist_ok=True)
 
 def take_screenshot(driver, step_name):
-    """Capture screenshot and save with timestamp"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"selenium_screenshots/{step_name}_{timestamp}.png"
     driver.save_screenshot(filename)
     print(f"📸 Screenshot saved: {filename}")
 
-# Chrome Options
+# Chrome Options for GUI
 options = webdriver.ChromeOptions()
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--window-size=1280,1024')
-options.add_argument('--auto-open-devtools-for-tabs')  # Opens dev tools for debugging
 
 try:
     # Initialize WebDriver
@@ -151,7 +148,7 @@ try:
     price = "499"
     quantity = "5"
 
-    # Test steps with screenshots
+    # Test steps
     print("🌐 Navigating to application...")
     driver.get("http://192.168.70.41:8080/onlinebookstore/")
     take_screenshot(driver, "01_homepage")
@@ -162,23 +159,19 @@ try:
     take_screenshot(driver, "02_login_page")
     time.sleep(2)
     
-    print("👔 Selecting seller login...")
     driver.find_element(By.XPATH, '//a[@href="SellerLogin.html"]').click()
     take_screenshot(driver, "03_seller_login")
     time.sleep(2)
     
-    print("📝 Entering credentials...")
     driver.find_element(By.ID, "userName").send_keys("admin")
     driver.find_element(By.ID, "Password").send_keys("admin")
     take_screenshot(driver, "04_credentials_entered")
     time.sleep(1)
     
-    print("🚀 Submitting login...")
     driver.find_element(By.CLASS_NAME, "AdminLogin").click()
     take_screenshot(driver, "05_post_login")
     time.sleep(2)
     
-    # Verify login
     if "Incorrect" in driver.page_source:
         print("❌ Login failed: Incorrect credentials.")
     elif "Welcome" in driver.page_source or "Dashboard" in driver.title:
@@ -217,7 +210,6 @@ try:
     take_screenshot(driver, "10_add_books_page")
     time.sleep(2)
 
-    print("📖 Entering book details...")
     driver.find_element(By.ID, "bookName").send_keys(book_name)
     time.sleep(0.5)
     driver.find_element(By.ID, "bookAuthor").send_keys(author)
@@ -228,7 +220,6 @@ try:
     take_screenshot(driver, "11_book_details_entered")
     time.sleep(0.5)
     
-    print("💾 Saving new book...")
     driver.find_element(By.XPATH, '//input[@type="submit" and contains(@value, "Add Book")]').click()
     take_screenshot(driver, "12_book_added")
     time.sleep(0.5)
@@ -239,7 +230,6 @@ try:
     take_screenshot(driver, "13_remove_books_page")
     time.sleep(2)
 
-    print("🗑️ Entering book ID for removal...")
     driver.find_element(By.ID, "bookCode").send_keys(book_id)
     take_screenshot(driver, "14_book_id_entered")
     driver.find_element(By.XPATH, '//input[@type="submit" and contains(@value, "Remove")]').click()
