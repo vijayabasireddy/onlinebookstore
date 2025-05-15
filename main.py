@@ -128,44 +128,49 @@ options.add_argument('--disable-gpu')
 options.add_argument(f'--user-data-dir={tempfile.mkdtemp()}')
 options.add_argument('--window-size=1280,1024')
 
-# Setup WebDriver
-service = Service(executable_path="./chromedriver")
-driver = webdriver.Chrome(service=service, options=options)
-
-# Test Data
-book_quantity = 30
-book_id = "8bd5fe50-9725-41da-bad8-476d577894f1"
-book_name = "one arranged murder"
-author = "chetan bhagat"
-price = "499"
-quantity = "5"
-
+# Setup WebDriver with explicit permissions check
 try:
-    # Test steps
-    print("🌐 Navigating to application...")
-    driver.get("http://192.168.70.41:8080/onlinebookstore/")
-    time.sleep(2)
+    # Verify chromedriver is executable
+    if not os.access('./chromedriver', os.X_OK):
+        os.chmod('./chromedriver', 0o755)
+    
+    service = Service(executable_path='./chromedriver')
+    driver = webdriver.Chrome(service=service, options=options)
+    
+    # Test Data
+    book_quantity = 30
+    book_id = "8bd5fe50-9725-41da-bad8-476d577894f1"
+    book_name = "one arranged murder"
+    author = "chetan bhagat"
+    price = "499"
+    quantity = "5"
 
-    print("🔑 Logging in...")
-    driver.find_element(By.LINK_TEXT, "Login").click()
-    time.sleep(2)
-    
-    driver.find_element(By.XPATH, '//a[@href="SellerLogin.html"]').click()
-    time.sleep(2)
-    
-    driver.find_element(By.ID, "userName").send_keys("admin")
-    driver.find_element(By.ID, "Password").send_keys("admin")
-    time.sleep(1)
-    
-    driver.find_element(By.CLASS_NAME, "AdminLogin").click()
-    time.sleep(2)
-    
-    if "Incorrect" in driver.page_source:
-        print("❌ Login failed: Incorrect credentials.")
-    elif "Welcome" in driver.page_source or "Dashboard" in driver.title:
-        print("✅ Login successful!")
-    else:
-        print("⚠️ Login result uncertain")
+    try:
+        # Test steps
+        print("🌐 Navigating to application...")
+        driver.get("http://192.168.70.41:8080/onlinebookstore/")
+        time.sleep(2)
+
+        print("🔑 Logging in...")
+        driver.find_element(By.LINK_TEXT, "Login").click()
+        time.sleep(2)
+        
+        driver.find_element(By.XPATH, '//a[@href="SellerLogin.html"]').click()
+        time.sleep(2)
+        
+        driver.find_element(By.ID, "userName").send_keys("admin")
+        driver.find_element(By.ID, "Password").send_keys("admin")
+        time.sleep(1)
+        
+        driver.find_element(By.CLASS_NAME, "AdminLogin").click()
+        time.sleep(2)
+        
+        if "Incorrect" in driver.page_source:
+            print("❌ Login failed: Incorrect credentials.")
+        elif "Welcome" in driver.page_source or "Dashboard" in driver.title:
+            print("✅ Login successful!")
+        else:
+            print("⚠️ Login result uncertain")
 
 
 
@@ -231,3 +236,6 @@ try:
 finally:
     driver.quit()
     print("🔚 Browser closed.")
+except Exception as e:
+    print(f"❌ Failed to initialize WebDriver: {str(e)}")
+    raise
