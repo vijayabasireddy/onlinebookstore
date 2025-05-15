@@ -172,70 +172,73 @@ try:
         else:
             print("⚠️ Login result uncertain")
 
-
-
-    driver.find_element(By.ID, "storebooks").click()
-    time.sleep(2)
-
-    try:
-        update_button = driver.find_element(By.XPATH, "//th[text()='9780132778046']/following-sibling::td/form/button[text()='Update']")
-        update_button.click()
+        driver.find_element(By.ID, "storebooks").click()
         time.sleep(2)
-        print("🔄 Clicked on 'Update' button for book 9780132778046.")
+
+        try:
+            update_button = driver.find_element(By.XPATH, "//th[text()='9780132778046']/following-sibling::td/form/button[text()='Update']")
+            update_button.click()
+            time.sleep(2)
+            print("🔄 Clicked on 'Update' button for book 9780132778046.")
+        except Exception as e:
+            print(f"❌ Failed to click 'Update': {e}")
+
+        try:
+            quantity_field = driver.find_element(By.ID, "bookQuantity")
+            quantity_field.clear()
+            quantity_field.send_keys(book_quantity)
+            time.sleep(2)
+
+            update_submit_btn = driver.find_element(By.XPATH, "//input[@type='submit' and @value=' Update Book ']")
+            update_submit_btn.click()
+            time.sleep(2)
+
+            print("✅ Book quantity updated to book_quantity and form submitted.")
+        except Exception as e:
+            print(f"❌ Failed to update book quantity: {e}")
+
+        driver.find_element(By.LINK_TEXT, "Add Books").click()
+        time.sleep(2)
+
+        driver.find_element(By.ID, "bookName").send_keys(book_name)
+        time.sleep(0.5)
+        driver.find_element(By.ID, "bookAuthor").send_keys(author)
+        time.sleep(0.5)
+        driver.find_element(By.NAME, "price").send_keys(price)
+        time.sleep(0.5)
+        driver.find_element(By.NAME, "quantity").send_keys(quantity)
+        time.sleep(0.5)
+        driver.find_element(By.XPATH, '//input[@type="submit" and contains(@value, "Add Book")]').click()
+        time.sleep(0.5)
+        print(f"📚 Book '{book_name}' added")
+
+        driver.find_element(By.LINK_TEXT, "Remove Books").click()
+        time.sleep(2)
+
+        driver.find_element(By.ID, "bookCode").send_keys(book_id)
+        driver.find_element(By.XPATH, '//input[@type="submit" and contains(@value, "Remove")]').click()
+        print(f"🗑️ Book with ID {book_id} submitted for removal.")
+        time.sleep(3)
+
+        driver.find_element(By.ID, "about").click()
+        time.sleep(2)
+        print("✅ Navigated to About Us page.")
+
+        try:
+            driver.find_element(By.ID, "logout").click()
+            time.sleep(2)
+            print("✅ Logged out successfully.")
+        except Exception as e:
+            print(f"❌ Logout failed: {e}")
+
     except Exception as e:
-        print(f"❌ Failed to click 'Update': {e}")
+        print(f"❌ Test failed: {str(e)}")
+        raise
 
-    try:
-        quantity_field = driver.find_element(By.ID, "bookQuantity")
-        quantity_field.clear()
-        quantity_field.send_keys(book_quantity)
-        time.sleep(2)
+    finally:
+        driver.quit()
+        print("🔚 Browser closed.")
 
-        update_submit_btn = driver.find_element(By.XPATH, "//input[@type='submit' and @value=' Update Book ']")
-        update_submit_btn.click()
-        time.sleep(2)
-
-        print("✅ Book quantity updated to book_quantity and form submitted.")
-    except Exception as e:
-        print(f"❌ Failed to update book quantity: {e}")
-
-    driver.find_element(By.LINK_TEXT, "Add Books").click()
-    time.sleep(2)
-
-    driver.find_element(By.ID, "bookName").send_keys(book_name)
-    time.sleep(0.5)
-    driver.find_element(By.ID, "bookAuthor").send_keys(author)
-    time.sleep(0.5)
-    driver.find_element(By.NAME, "price").send_keys(price)
-    time.sleep(0.5)
-    driver.find_element(By.NAME, "quantity").send_keys(quantity)
-    time.sleep(0.5)
-    driver.find_element(By.XPATH, '//input[@type="submit" and contains(@value, "Add Book")]').click()
-    time.sleep(0.5)
-    print(f"📚 Book '{book_name}' added")
-
-    driver.find_element(By.LINK_TEXT, "Remove Books").click()
-    time.sleep(2)
-
-    driver.find_element(By.ID, "bookCode").send_keys(book_id)
-    driver.find_element(By.XPATH, '//input[@type="submit" and contains(@value, "Remove")]').click()
-    print(f"🗑️ Book with ID {book_id} submitted for removal.")
-    time.sleep(3)
-
-    driver.find_element(By.ID, "about").click()
-    time.sleep(2)
-    print("✅ Navigated to About Us page.")
-
-    try:
-        driver.find_element(By.ID, "logout").click()
-        time.sleep(2)
-        print("✅ Logged out successfully.")
-    except Exception as e:
-        print(f"❌ Logout failed: {e}")
-
-finally:
-    driver.quit()
-    print("🔚 Browser closed.")
 except Exception as e:
     print(f"❌ Failed to initialize WebDriver: {str(e)}")
     raise
