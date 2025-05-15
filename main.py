@@ -16,9 +16,9 @@ service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service, options=options)
 # === Book Details ===
 book_quantity = 30
-book_id = "64f27e8a-ac37-4b7f-ac39-6af595f4be09"
-book_name = "AI Revolution"
-author = "OpenAI"
+book_id = "1a9f63bc-6046-4681-bf98-832e805d0378"
+book_name = "one arranged murder"
+author = "chetan bhagat"
 price = "499"
 quantity = "5"
 try:
