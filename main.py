@@ -23,7 +23,7 @@ price = "499"
 quantity = "5"
 try:
     # Step 1: Go to main page
-    driver.get("http://192.168.70.41:8080/onlinebookstore/")
+    driver.get("http://192.168.70.182:8080/onlinebookstore/")
     time.sleep(2)
     # Step 2: Click "Login" in the menu
     driver.find_element(By.LINK_TEXT, "Login").click()
